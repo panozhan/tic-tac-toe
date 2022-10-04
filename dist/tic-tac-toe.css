@@ -1,0 +1,34 @@
+.tile {
+    width:98px;
+    height:98px;
+    border: 1px solid black;
+    float:left;
+    background: grey;
+  }
+  
+  .row {
+    height: 100px;
+  }
+  
+  .circle {
+    border: 1px solid black;
+    width: 96px;
+    height: 96px;
+    border-radius: 48px;
+  }
+  
+  .crossLeft {
+    border: 1px solid black;
+    width: 10px;
+    height: 96px;
+    transform: translate(43px) rotate(45deg) ;
+    position: absolute;
+  }
+  
+  .crossRight {
+    border: 1px solid black;
+    width: 10px;
+    height: 96px;
+    transform: translate(43px) rotate(-45deg) ;
+    position: absolute;
+  }
