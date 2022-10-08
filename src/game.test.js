@@ -56,15 +56,15 @@ describe('Test getRootNodeForDimension ', function(){
     };
     test('Should return a root node with childrens representing a 3x3 board', function(){
         const game = new Game(3);
-        testGetRootNodeForDimensionHelper(game.dimension_, Game.getRootNodeForDimension(game));
+        testGetRootNodeForDimensionHelper(game.dimension_, game.getRootNodeForDimension());
     });
     test('Should return a root node with childrens representing a 4x4 board', function(){
         const game = new Game(4);
-        testGetRootNodeForDimensionHelper(game.dimension_, Game.getRootNodeForDimension(game));
+        testGetRootNodeForDimensionHelper(game.dimension_, game.getRootNodeForDimension());
     });
     test('Should return a root node with childrens representing a 15x15 board', function(){
         const game = new Game(15);
-        testGetRootNodeForDimensionHelper(game.dimension_, Game.getRootNodeForDimension(game));
+        testGetRootNodeForDimensionHelper(game.dimension_, game.getRootNodeForDimension());
     });
   });
 
@@ -81,7 +81,8 @@ describe('Test Game Play logic 3x3', () => {
         return tile;
     }
     beforeEach(() => {
-        root = Game.getRootNodeForDimension(new Game(3));
+        const game = new Game(4);
+        root = game.getRootNodeForDimension();
     });
     expect.extend({
         toHaveCrossInChild: function(tile) {
@@ -160,4 +161,37 @@ describe('Test Game Play logic 3x3', () => {
             }, 10);
         });
     });
+
+    test('Should draw a red winning line in row 1 when player 1 wins', () => {
+
+    });
+
+    test('Should draw a blue winning line in row 1 when player 2 wins', () => {
+
+    });
+
+    test('Should draw a red winning line in column 1 when player 1 wins', () => {
+
+    });
+
+    test('Should draw a blue winning line in column 1 when player 2 wins', () => {
+
+    });
+
+    test('Should draw a red winning line in the right diagonal when player 1 wins', () => {
+
+    });
+
+    test('Should draw a blue winning line in the right diagonal when player 2 wins', () => {
+
+    });
+
+    test('Should draw a red winning line in the left diagonal when player 1 wins', () => {
+
+    });
+
+    test('Should draw a blue winning line in the left diagonal when player 2 wins', () => {
+
+    });
+
 });

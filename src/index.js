@@ -2,7 +2,8 @@ const Game = require('./game');
 
 function initApplication() {
     const dimension = 5;
-    const rootNode = Game.getRootNodeForDimension(new Game(dimension));
+    const game = new Game(dimension);
+    const rootNode = game.getRootNodeForDimension();
     document.getElementById('game').append(rootNode);
 }
 
