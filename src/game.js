@@ -62,123 +62,6 @@ Game.prototype.handleClickOnTile = function(tile) {
     }
 }
 
-Game.prototype.WINNING_LINE_CASE = {
-    ROW: 0,
-    COL: 1,
-    RIGHT_DIAG: 2,
-    LEFT_DIAG: 3
-}
-
-Game.prototype.drawLineIfPlayerHasWonAndEndGame = function() {
-    for (let i = 0; i < this.dimension_; ++i) {
-        let winningPlayerRow = this.board_[i][0];
-        let isWinningRow = this.board_[i][0] !== 0; 
-        for (let j = 0; j < this.dimension_; ++j) {
-            if (this.board_[i][j] !== winningPlayerRow) {
-                isWinningRow = false;
-            }
-        }
-        if (isWinningRow) {
-            this.drawWinningLine(this.WINNING_LINE_CASE.ROW, i);
-            return;
-        }
-    }
-
-    for (let i = 0; i < this.dimension_; ++i) {
-        let winningPlayerCol = this.board_[0][i];
-        let isWinningCol = this.board_[0][i] !== 0; 
-        for (let j = 0; j < this.dimension_; ++j) {
-            if (this.board_[j][i] !== winningPlayerCol) {
-                isWinningCol = false;
-            }
-        }
-        if (isWinningCol) {
-            this.drawWinningLine(this.WINNING_LINE_CASE.COL, i);
-            return;
-        }
-    }
-
-    let winningPlayerRightDiagonal = this.board_[0][0];
-    let isWinningRightDiagonal = this.board_[0][0] !== 0; 
-    for (let i = 0; i < this.dimension_; ++i) {
-        if (this.board_[i][i] !== winningPlayerRightDiagonal) {
-            isWinningRightDiagonal = false;
-        }
-    }
-
-    if (isWinningRightDiagonal) {
-        this.drawWinningLine(this.WINNING_LINE_CASE.RIGHT_DIAG);
-        return;
-    }
-
-    let winningPlayerLeftDiagonal = this.board_[0][this.dimension_ - 1];
-    let isWinningLeftDiagonal = this.board_[0][this.dimension_ - 1] !== 0; 
-    for (let i = 0; i < this.dimension_; ++i) {
-        if (this.board_[i][this.dimension_ - 1 - i] !== winningPlayerLeftDiagonal) {
-            isWinningLeftDiagonal = false;
-        }
-    }
-
-    if (isWinningLeftDiagonal) {
-        this.drawWinningLine(this.WINNING_LINE_CASE.LEFT_DIAG);
-    }
-}
-
-/**
- * Adds elements with a strike through class based on the winning case
- * If the winning case is "row" - it will add elements with the class "row-strike-through"
- * If the winning case is "col" - it will add elements with the class "col-strike-through"
- * If the winning case is "right-diag" - it will add elements with the class "right-strike-through"
- * If the winning case is "left-diag" - it will add elements with the class "left-strike-through"
- * @param {@enum} winningCase
- * @param {number} position
- */
-Game.prototype.drawWinningLine = function(winningCase, position) {
-    let className;
-    switch (winningCase) {
-        case this.WINNING_LINE_CASE.ROW:
-            className = 'row-strike-through';
-            for (let i = 0; i < this.dimension_; ++i) {
-                const element = document.createElement('div');
-                element.className = className;
-                const row = this.root_.children.namedItem(`row-${position}`);
-                const tile = row.children.namedItem(`tile-${position}-${i}`);
-                tile.appendChild(element);
-            }
-            break;
-        case this.WINNING_LINE_CASE.COL:
-            className = 'col-strike-through';
-            for (let i = 0; i < this.dimension_; ++i) {
-                const element = document.createElement('div');
-                element.className = className;
-                const row = this.root_.children.namedItem(`row-${i}`);
-                const tile = row.children.namedItem(`tile-${i}-${position}`);
-                tile.appendChild(element);
-            }
-            break;
-        case this.WINNING_LINE_CASE.RIGHT_DIAG:
-            className = 'right-diag-strike-through';
-            for (let i = 0; i < this.dimension_; ++i) {
-                const element = document.createElement('div');
-                element.className = className;
-                const row = this.root_.children.namedItem(`row-${i}`);
-                const tile = row.children.namedItem(`tile-${i}-${i}`);
-                tile.appendChild(element);
-            }
-            break;
-        case this.WINNING_LINE_CASE.LEFT_DIAG:
-            className = 'left-diag-strike-through';
-            for (let i = 0; i < this.dimension_; ++i) {
-                const element = document.createElement('div');
-                element.className = className;
-                const row = this.root_.children.namedItem(`row-${i}`);
-                const tile = row.children.namedItem(`tile-${i}-${this.dimension_ - 1 - i}`);
-                tile.appendChild(element);
-            }
-            break;
-    }
-    
-}
 
 /** 
     This function should return a single element or tag DIV, and id = root.
@@ -214,7 +97,7 @@ Game.prototype.getRootNodeForDimension = function() {
             tile.addEventListener('click', (pointerEvent) => {
                 tile.style.pointerEvents = 'none';
                 this.handleClickOnTile(pointerEvent.target);
-                this.drawLineIfPlayerHasWonAndEndGame();
+
             });
             row.append(tile);
         }
