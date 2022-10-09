@@ -28,7 +28,6 @@ Game.prototype.PLAYER_ID = {
 
 Game.prototype.getRowAndColByTileId = function(id) {
 	let parts = id.split('-');
-    console.log(parts);
     if (parts.length !== 3) {
         console.log('WARNING - did not find 3 parts in tile id');
         return [-1,-1];
@@ -71,7 +70,6 @@ Game.prototype.WINNING_LINE_CASE = {
 }
 
 Game.prototype.drawLineIfPlayerHasWonAndEndGame = function() {
-    console.log(this.board_);
     for (let i = 0; i < this.dimension_; ++i) {
         let winningPlayerRow = this.board_[i][0];
         let isWinningRow = this.board_[i][0] !== 0; 

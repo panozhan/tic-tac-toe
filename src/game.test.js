@@ -69,6 +69,7 @@ describe('Test getRootNodeForDimension ', function(){
   });
 
 describe('Test Game Play logic 3x3', () => {
+    const dimension = 4;
     let root;
     const clickTile = function(i,j) {
         expect(root.children.length).toBeGreaterThan(i);
@@ -81,7 +82,7 @@ describe('Test Game Play logic 3x3', () => {
         return tile;
     }
     beforeEach(() => {
-        const game = new Game(4);
+        const game = new Game(dimension);
         root = game.getRootNodeForDimension();
     });
     expect.extend({
@@ -116,6 +117,85 @@ describe('Test Game Play logic 3x3', () => {
             return {
                 pass: tile.style.pointerEvents === 'none',
                 message: () => `Expected the pointer events style of the tile to be none, but actual is ${tile.style.pointerEvents}`
+            }
+        },
+        toHaveStrikeThroughInRow: function(row) {
+            let allTilesHaveStrikeThrough = true;
+            let wrongTiles = [];
+            for (let i = 0; i < dimension; ++i) {
+                const tile = row.children.item(i);
+                let tileHaveStrikeThrough = false;
+                for (let j = 0; j < tile.children.length; ++j) {
+                    tileHaveStrikeThrough = tileHaveStrikeThrough || tile.children.item(j).className === 'row-strike-through';
+                }
+                allTilesHaveStrikeThrough = allTilesHaveStrikeThrough && tileHaveStrikeThrough;
+                if (!tileHaveStrikeThrough) {
+                    wrongTiles.push(i);
+                }
+            }
+            return {
+                pass: allTilesHaveStrikeThrough,
+                message: () => `Expected each tile in row to have an element with the class name of row-strike-through, but tiles ${wrongTiles.join(',')} do not have such a child node`
+            }
+        },
+        toHaveStrikeThroughInCol: function(root, column) {
+            let allTilesHaveStrikeThrough = true;
+            let wrongTiles = [];
+            for (let i = 0; i < dimension; ++i) {
+                const row = root.children.namedItem(`row-${i}`);
+                const tile = row.children.namedItem(`tile-${i}-${column}`);
+                let tileHaveStrikeThrough = false;
+                for (let j = 0; j < tile.children.length; ++j) {
+                    tileHaveStrikeThrough = tileHaveStrikeThrough || tile.children.item(j).className === 'col-strike-through';
+                }
+                allTilesHaveStrikeThrough = allTilesHaveStrikeThrough && tileHaveStrikeThrough;
+                if (!tileHaveStrikeThrough) {
+                    wrongTiles.push(i);
+                }
+            }
+            return {
+                pass: allTilesHaveStrikeThrough,
+                message: () => `Expected each tile in column to have an element with the class name of col-strike-through, but tiles ${wrongTiles.join(',')} do not have such a child node`
+            }
+        },
+        toHaveStrikeThroughInRightDiagonal: function(root) {
+            let allTilesHaveStrikeThrough = true;
+            let wrongTiles = [];
+            for (let i = 0; i < dimension; ++i) {
+                const row = root.children.namedItem(`row-${i}`);
+                const tile = row.children.namedItem(`tile-${i}-${i}`);
+                let tileHaveStrikeThrough = false;
+                for (let j = 0; j < tile.children.length; ++j) {
+                    tileHaveStrikeThrough = tileHaveStrikeThrough || tile.children.item(j).className === 'right-diag-strike-through';
+                }
+                allTilesHaveStrikeThrough = allTilesHaveStrikeThrough && tileHaveStrikeThrough;
+                if (!tileHaveStrikeThrough) {
+                    wrongTiles.push(i);
+                }
+            }
+            return {
+                pass: allTilesHaveStrikeThrough,
+                message: () => `Expected each tile in the right diagonal to have an element with the class name of right-diag-strike-through, but tiles ${wrongTiles.join(',')} do not have such a child node`
+            }
+        },
+        toHaveStrikeThroughInLeftDiagonal: function(root) {
+            let allTilesHaveStrikeThrough = true;
+            let wrongTiles = [];
+            for (let i = 0; i < dimension; ++i) {
+                const row = root.children.namedItem(`row-${i}`);
+                const tile = row.children.namedItem(`tile-${i}-${dimension - 1 - i}`);
+                let tileHaveStrikeThrough = false;
+                for (let j = 0; j < tile.children.length; ++j) {
+                    tileHaveStrikeThrough = tileHaveStrikeThrough || tile.children.item(j).className === 'left-diag-strike-through';
+                }
+                allTilesHaveStrikeThrough = allTilesHaveStrikeThrough && tileHaveStrikeThrough;
+                if (!tileHaveStrikeThrough) {
+                    wrongTiles.push(i);
+                }
+            }
+            return {
+                pass: allTilesHaveStrikeThrough,
+                message: () => `Expected each tile in the left diagonal to have an element with the class name of left-diag-strike-through, but tiles ${wrongTiles.join(',')} do not have such a child node`
             }
         }
     })
@@ -163,35 +243,65 @@ describe('Test Game Play logic 3x3', () => {
     });
 
     test('Should draw a red winning line in row 1 when player 1 wins', () => {
+        return new Promise(resolve => {
+            for (let i = 0; i < dimension - 1; ++i) {
+                clickTile(0,i);
+                clickTile(1,i);
+            }
+            clickTile(0, dimension - 1);
 
-    });
-
-    test('Should draw a blue winning line in row 1 when player 2 wins', () => {
-
+            setTimeout(() => {
+                expect(root.children.namedItem('row-0')).toHaveStrikeThroughInRow();
+                resolve();
+            }, 10);
+        });
     });
 
     test('Should draw a red winning line in column 1 when player 1 wins', () => {
+        return new Promise(resolve => {
+            const col = 0;
+            for (let i = 0; i < dimension - 1; ++i) {
+                clickTile(i,col);
+                clickTile(i,col + 1);
+            }
+            clickTile(dimension - 1, col);
 
-    });
-
-    test('Should draw a blue winning line in column 1 when player 2 wins', () => {
-
+            setTimeout(() => {
+                expect(root).toHaveStrikeThroughInCol(col);
+                resolve();
+            }, 10);
+        });
     });
 
     test('Should draw a red winning line in the right diagonal when player 1 wins', () => {
+        return new Promise(resolve => {
+            for (let i = 0; i < dimension - 1; ++i) {
+                clickTile(i,i);
+                clickTile(i,i + 1);
+            }
+            clickTile(dimension - 1, dimension - 1);
 
-    });
-
-    test('Should draw a blue winning line in the right diagonal when player 2 wins', () => {
-
+            setTimeout(() => {
+                expect(root).toHaveStrikeThroughInRightDiagonal();
+                resolve();
+            }, 10);
+        });
     });
 
     test('Should draw a red winning line in the left diagonal when player 1 wins', () => {
+        return new Promise(resolve => {
+            const col = 0;
+            for (let i = 0; i < dimension - 1; ++i) {
+                clickTile(i,dimension - 1 - i);
+                clickTile(i,dimension - 2 - i);
+            }
+            clickTile(dimension - 1, 0);
 
-    });
-
-    test('Should draw a blue winning line in the left diagonal when player 2 wins', () => {
-
+            setTimeout(() => {
+                expect(root).toHaveStrikeThroughInLeftDiagonal();
+                resolve();
+            }, 10);
+        });
     });
 
 });

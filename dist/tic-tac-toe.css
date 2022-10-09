@@ -35,18 +35,13 @@
     position: absolute;
   }
 
-  .background-red {
-    background-color: red;
-  }
-  .background-blue {
-    background-color: blue;
-  }
   .row-strike-through {
     position: absolute;
     top: 40px;
     width: 100px;
     height: 20px;
     z-index: 5;
+    background-color: red;
   }
   .col-strike-through {
     position: absolute;
@@ -54,6 +49,7 @@
     width: 20px;
     height: 100px;
     z-index: 5;
+    background-color: red;
   }
   .right-diag-strike-through {
     position: absolute;
@@ -62,6 +58,7 @@
     height: 142px;
     transform: translateY(-20px) rotate(-45deg) ;
     z-index: 5;
+    background-color: red;
   }
   .left-diag-strike-through {
     position: absolute;
@@ -70,4 +67,5 @@
     height: 142px;
     transform: translateY(-20px) rotate(45deg) ;
     z-index: 5;
+    background-color: red;
   }
